@@ -1146,12 +1146,13 @@ class NinjaBackend(backends.Backend):
             _, _, cmd = self.eval_custom_target_command(target)
             meson_exe_cmd, reason = self.as_meson_exe_cmdline(target.command[0], cmd[1:],
                                                               env=target_env,
-                                                              verbose=True)
+                                                              verbose=target.console)
             cmd_type = f' (wrapped by meson {reason})' if reason else ''
             elem = self.create_phony_target(self.all_outputs, target_name, 'CUSTOM_COMMAND', [])
             elem.add_item('COMMAND', meson_exe_cmd)
             elem.add_item('description', f'Running external command {target.name}{cmd_type}')
-            elem.add_item('pool', 'console')
+            if target.console:
+                elem.add_item('pool', 'console')
         deps = self.unwrap_dep_list(target)
         deps += self.get_custom_target_depend_files(target)
         elem.add_dep(deps)

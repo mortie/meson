@@ -2633,7 +2633,8 @@ class RunTarget(Target, CommandBase):
                  subproject: str,
                  environment: environment.Environment,
                  env: T.Optional['EnvironmentVariables'] = None,
-                 default_env: bool = True):
+                 default_env: bool = True,
+                 console: bool = True):
         # These don't produce output artifacts
         super().__init__(name, subdir, subproject, False, MachineChoice.BUILD, environment)
         self.dependencies = dependencies
@@ -2642,6 +2643,7 @@ class RunTarget(Target, CommandBase):
         self.absolute_paths = False
         self.env = env
         self.default_env = default_env
+        self.console = console
 
     def __repr__(self) -> str:
         repr_str = "<{0} {1}: {2}>"

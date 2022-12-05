@@ -1976,6 +1976,7 @@ class Interpreter(InterpreterBase, HoldableObject):
         COMMAND_KW,
         DEPENDS_KW,
         ENV_KW.evolve(since='0.57.0'),
+        KwargInfo('console', bool, default=True, since='0.65.0'),
     )
     def func_run_target(self, node: mparser.FunctionNode, args: T.Tuple[str],
                         kwargs: 'kwtypes.RunTarget') -> build.RunTarget:
@@ -1988,7 +1989,8 @@ class Interpreter(InterpreterBase, HoldableObject):
             all_args[0] = self.find_program_impl([all_args[0]])
         name = args[0]
         tg = build.RunTarget(name, all_args, kwargs['depends'], self.subdir, self.subproject, self.environment,
-                             kwargs['env'])
+                             kwargs['env'],
+                             console=kwargs['console'])
         self.add_target(name, tg)
         return tg
 
